@@ -10,8 +10,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/news', (req, res) => {
-    axios.get('')
-    .then(())
+    axios.get('https://cointelegraph.com/')
+    .then((response) => {
+        const html = response.data
+        console.log(html)
+    })
 })
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
