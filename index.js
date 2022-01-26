@@ -1,4 +1,4 @@
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 const express = require('express')
 const axios = require('axios')
 const chreerio = require('cheerio')
@@ -22,6 +22,21 @@ const newinfos = [
     {
         name:'cryptonew',
         address:'https://cryptonews.net/',
+        base:''
+    },
+    {
+        name:'coindesk',
+        address:'https://www.coindesk.com/',
+        base:''
+    },
+    {
+        name:'todayonchain',
+        address:'https://www.todayonchain.com/',
+        base:''
+    },
+    {
+        name:'newsbtc',
+        address:'https://www.newsbtc.com/',
         base:''
     }
 ]
@@ -61,12 +76,30 @@ app.get('/news', (req, res) => {
    res.json(articles)
 })
 
-app.get('/news/:newinfoId', async(req, res) => {
+app.get('/news/:newinfoId', (req, res) => {
     const newinfoId = req.params.newinfoId
 
-   const newinfo = newinfos.filter(newinfo => newinfo.name === newinfoId)
+   const newinfoAddresse = newinfos.filter(newinfo => newinfo.name == newinfoId)[0].address
 
-    //axios.get()
+   const newinfoBase = newinfos.filter(newinfo => newinfo.name == newinfoId)[0].base
+
+    axios.get(newinfoAddresse)
+    .then(response => {
+        const html = response.data
+        const $ = chreerio.load(html)
+        const spesificArticles = []
+
+        $(`a:contains("Bitcoin"), a:contains("Ethereum")`, html).each(function(){
+           const title = $(this).text()
+           const url = $(this).attr('href')
+           spesificArticles.push({
+               title,
+               url: newinfoBase + url,
+               source: newinfoId
+           }) 
+        })
+        res.json(spesificArticles)
+    }).catch(err => console.log(err))
 })
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
