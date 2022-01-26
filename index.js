@@ -10,16 +10,19 @@ const app = express()
 const newinfos = [
     {
         name: 'cointhelegraph',
-        address:'https://cointelegraph.com/'
+        address:'https://www.cointelegraph.com/',
+        base:''
     
     },
     {
         name: 'time',
-        address:'https://time.com/nextadvisor/investing/cryptocurrency/'
+        address:'https://www.time.com/nextadvisor/investing/cryptocurrency/',
+        base:'https://www.time.com/nextadvisor/investing'
     },
     {
         name:'cryptonew',
-        address:'https://cryptonews.net/'
+        address:'https://cryptonews.net/',
+        base:''
     }
 ]
 
@@ -39,7 +42,7 @@ newinfos.forEach(newinfo => {
 
            articles.push({
                title,
-               url,
+               url: newinfo.base + url,
                source: newinfo.name
            })
         
@@ -56,6 +59,14 @@ app.get('/', (req, res) => {
 
 app.get('/news', (req, res) => {
    res.json(articles)
+})
+
+app.get('/news/:newinfoId', async(req, res) => {
+    const newinfoId = req.params.newinfoId
+
+   const newinfo = newinfos.filter(newinfo => newinfo.name === newinfoId)
+
+    //axios.get()
 })
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
