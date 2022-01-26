@@ -6,7 +6,7 @@ const chreerio = require('cheerio')
 const app = express()
 
 
-const newinfo = [
+const newinfos = [
     {
         name: 'cointhelegraph',
         address:'https://cointelegraph.com/'
@@ -26,9 +26,20 @@ const newinfo = [
 const articles = []
 
 
-newinfo.forEach(newinfo => {
+newinfos.forEach(newinfo => {
+    axios.get(newinfo.address)
+    .then(response => {
+        const html = response.data
+        const $ = chreerio.load(html) 
 
-    
+        $(`a:contains("Bitcoin"), a:contains("Ethereum")`, html).each(function (){
+           const title = $(this).text()
+           const url = $(this).attr('href')
+        
+        })
+
+
+    }) 
 })
 
 
