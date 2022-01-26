@@ -5,19 +5,44 @@ const chreerio = require('cheerio')
 
 const app = express()
 
+
+const newinfo = [
+    {
+        name: 'cointhelegraph',
+        address:'https://cointelegraph.com/'
+    
+    },
+    {
+        name: 'crypto-bloomberg',
+        address:'https://www.bloomberg.com/crypto'
+    },
+    {
+        name:'cryptonew',
+        address:'https://cryptonews.net/'
+    }
+]
+
+
 const articles = []
+
+
+newinfo.forEach(newinfo => {
+
+    
+})
+
 
 app.get('/', (req, res) => {
     res.json('Welcome to my CryptoNews Api')
 })
 
 app.get('/news', (req, res) => {
-    axios.get('https://cointelegraph.com/')
+   /* axios.get('https://cointelegraph.com/')
     .then((response) => {
         const html = response.data
         const $ = chreerio.load(html)
 
-        $('a:contains("bitcoin", "ethereum")', html).each(function (){
+        $(`a:contains("Bitcoin"), a:contains("Ethereum")`, html).each(function (){
             const title = $(this).text()
             const url = $(this).attr('href')
             articles.push({
@@ -29,4 +54,6 @@ app.get('/news', (req, res) => {
     }).catch((err) => console.log(err))
 })
 
+
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
+*/})
